@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://freevector.co/wp-content/uploads/2014/04/63226-timetable-outline.png"
+    type="image/icon type">
+  <title>Timetable</title>
+  <!-- Add your CSS stylesheet here -->
+  <link rel="stylesheet" href="styles.css">
+  <script src="index.js"></script>
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+
+</head>
+
+
+<body>
+  <svg preserveAspectRatio="xMidYMid meet" data-bbox="53.245 47.211 93.512 105.578"
+    viewBox="53.245 47.211 93.512 105.578" height="200" width="200" xmlns="http://www.w3.org/2000/svg" data-type="tint"
+    role="img" aria-label="Homepage">
+    <g>
+      <path
+        d="M100 47.211L53.245 79.502v10.287H61.5v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789H82.5v-7h7v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789h4.104v-7h7v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789h4.104v-7h8.255V79.501L100 47.211zm-24.604 75.183l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zM79.5 93.789h-15v-4h15v4zm23.896 28.605l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zm4.104-28.605h-15v-4h15v4zm23.896 28.605l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zm4.104-28.605h-15v-4h15v4zm8.255-7h-87.51v-5.713L100 50.856l43.755 30.219v5.714z"
+        fill="#7CE6E8"></path>
+      <path d="M141.5 135.789h-83v7h-5v10h93v-10h-5v-7zm-80 3h77v4h-77v-4zm82 7v4h-87v-4h87z" fill="#7CE6E8"></path>
+      <path
+        d="M93.5 72.289c0 3.584 2.916 6.5 6.5 6.5s6.5-2.916 6.5-6.5-2.916-6.5-6.5-6.5-6.5 2.916-6.5 6.5zm10 0c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5z"
+        fill="#7CE6E8"></path>
+    </g>
+  </svg>
+  <span id="main"><a id="mainLink" href="https://www.studykraft.tech/" target="_blank">STUDYKRAFT</a></span>
+  <!-- Timetable for Days and Time -->
+  <!-- Timetable for Days and Time -->
+  <div id="timetable-container">
+    <table id="timetable">
+      <thead>
+        <tr>
+          <th></th>
+          <th>8:30 AM - 10:00 AM</th>
+          <th>10:05 AM - 11:35 AM</th>
+          <th>11:40 AM - 1:10 PM</th>
+          <th>1:15 PM - 2:45 PM</th>
+          <th>2:50 PM - 4:20 PM</th>
+          <th>4:25 PM - 5:55 PM</th>
+          <th>6:00 PM - 7:30 PM</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>MON</th>
+          <td class="slot" data-day="MON" data-start="8:30" data-end="10:00">A11</td>
+          <td class="slot" data-day="MON" data-start="10:05" data-end="11:35">B11</td>
+          <td class="slot" data-day="MON" data-start="11:40" data-end="1:10">C11</td>
+          <td class="slot" data-day="MON" data-start="1:15" data-end="2:45">A21</td>
+          <td class="slot" data-day="MON" data-start="2:50" data-end="4:20">A14</td>
+          <td class="slot" data-day="MON" data-start="4:25" data-end="5:55">B21</td>
+          <td class="slot" data-day="MON" data-start="6:00" data-end="7:30">C21</td>
+        </tr>
+        <tr>
+          <th>TUE</th>
+          <td class="slot" data-day="TUE" data-start="8:30" data-end="10:00">D11</td>
+          <td class="slot" data-day="TUE" data-start="10:05" data-end="11:35">E11</td>
+          <td class="slot" data-day="TUE" data-start="11:40" data-end="1:10">F11</td>
+          <td class="slot" data-day="TUE" data-start="1:15" data-end="2:45">D21</td>
+          <td class="slot" data-day="TUE" data-start="2:50" data-end="4:20">E14</td>
+          <td class="slot" data-day="TUE" data-start="4:25" data-end="5:55">E21</td>
+          <td class="slot" data-day="TUE" data-start="6:00" data-end="7:30">F21</td>
+        </tr>
+        <tr>
+          <th>WED</th>
+          <td class="slot" data-day="WED" data-start="8:30" data-end="10:00">A12</td>
+          <td class="slot" data-day="WED" data-start="10:05" data-end="11:35">B12</td>
+          <td class="slot" data-day="WED" data-start="11:40" data-end="1:10">C12</td>
+          <td class="slot" data-day="WED" data-start="1:15" data-end="2:45">A22</td>
+          <td class="slot" data-day="WED" data-start="2:50" data-end="4:20">B14</td>
+          <td class="slot" data-day="WED" data-start="4:25" data-end="5:55">B22</td>
+          <td class="slot" data-day="WED" data-start="6:00" data-end="7:30">A24</td>
+        </tr>
+        <tr>
+          <th>THU</th>
+          <td class="slot" data-day="THU" data-start="8:30" data-end="10:00">D12</td>
+          <td class="slot" data-day="THU" data-start="10:05" data-end="11:35">E12</td>
+          <td class="slot" data-day="THU" data-start="11:40" data-end="1:10">F12</td>
+          <td class="slot" data-day="THU" data-start="1:15" data-end="2:45">D22</td>
+          <td class="slot" data-day="THU" data-start="2:50" data-end="4:20">F14</td>
+          <td class="slot" data-day="THU" data-start="4:25" data-end="5:55">E22</td>
+          <td class="slot" data-day="THU" data-start="6:00" data-end="7:30">F22</td>
+        </tr>
+        <tr>
+          <th>FRI</th>
+          <td class="slot" data-day="FRI" data-start="8:30" data-end="10:00">A13</td>
+          <td class="slot" data-day="FRI" data-start="10:05" data-end="11:35">B13</td>
+          <td class="slot" data-day="FRI" data-start="11:40" data-end="1:10">C13</td>
+          <td class="slot" data-day="FRI" data-start="1:15" data-end="2:45">A23</td>
+          <td class="slot" data-day="FRI" data-start="2:50" data-end="4:20">C14</td>
+          <td class="slot" data-day="FRI" data-start="4:25" data-end="5:55">B23</td>
+          <td class="slot" data-day="FRI" data-start="6:00" data-end="7:30">B24</td>
+        </tr>
+        <tr>
+          <th>SAT</th>
+          <td class="slot" data-day="SAT" data-start="8:30" data-end="10:00">D13</td>
+          <td class="slot" data-day="SAT" data-start="10:05" data-end="11:35">E13</td>
+          <td class="slot" data-day="SAT" data-start="11:40" data-end="1:10">F13</td>
+          <td class="slot" data-day="SAT" data-start="1:15" data-end="2:45">D23</td>
+          <td class="slot" data-day="SAT" data-start="2:50" data-end="4:20">D14</td>
+          <td class="slot" data-day="SAT" data-start="4:25" data-end="5:55">D24</td>
+          <td class="slot" data-day="SAT" data-start="6:00" data-end="7:30">E23</td>
+        </tr>
+        <!-- Add similar rows for other days -->
+      </tbody>
+    </table>
+  </div>
+
+
+  <br>
+
+  <!-- Error message for slot clash -->
+
+
+  <table id="buttonstable">
+    <th>
+      <!-- Save Changes button -->
+      <button id="saveButton">Save Changes</button>
+      <!-- Clear Changes button -->
+      <button id="clearButton">Clear Changes</button>
+      <button id="downloadScreenshotButton">Download ⭳ </button>
+    </th>
+
+  </table>
+
+  <!-- Flash message for changes saved -->
+  <div id="flashMessage" class="flash-message"></div>
+  <!-- Flash message for Save Changes -->
+  <div id="saveChangesFlash" class="flash-message"></div>
+
+  <!-- Flash message for Clear Changes -->
+  <div id="clearChangesFlash" class="flash-message"></div>
+  <br>
+
+
+  <!-- Input for the number of courses -->
+  <label for="courseCount" id="courseCountLabel">Number of Courses:</label>
+  <input type="number" id="courseCount" min="1" max="10" value="1">
+  <button id="submitCourseCount">Submit</button>
+  <div id="boxes">
+    <!-- Input fields for each course -->
+    <div id="courseInputs" class="box"></div>
+    <!-- Selected slots table -->
+    <div id="selectedTable" class="box">
+      <table>
+        <thead>
+          <tr>
+            <th>Selected Slots</th>
+          </tr>
+        </thead>
+        <tbody id="selectedSlots">
+          <!-- Selected slots will be displayed here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,361 @@
+/* Reset some default styles */
+html,
+body,
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  font-size: 18px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -65px;
+  text-align: center;
+  font-weight: bolder;
+  font-family: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+}
+
+#mainLink:visited {
+  text-decoration: none;
+  color: black;
+}
+
+#mainLink:link {
+  text-decoration: none;
+  color: black;
+}
+
+#mainLink:active {
+  text-decoration: none;
+  color: black;
+}
+
+svg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -60px;
+  margin-bottom: 6px;
+  width: 60px;
+
+
+
+}
+
+/* Style for the timetable container */
+#timetable-container {
+  max-width: 100%;
+  justify-content: center;
+  margin: 15px;
+  background-color: white;
+
+}
+
+/* Style for the timetable */
+#timetable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+
+
+}
+
+#timetable th,
+#timetable td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #ccc;
+  font-weight: bold;
+
+}
+
+#timetable th {
+  background-color: #20366b;
+  color: #fff;
+}
+
+#buttonstable {
+  justify-content: center;
+  display: flex;
+}
+
+.slot {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.slot.selected {
+  background-color: #35bcbf;
+  color: #fff;
+}
+
+/* Style for the selected slots table */
+/* #selectedTable {
+  
+} */
+
+#selectedTable table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0px 15px 0px;
+  padding: 30px;
+  float: right;
+
+
+
+}
+
+#selectedTable th {
+  background-color: #142d4c;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+
+}
+
+#selectedTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.boxes {
+  display: flex;
+  justify-content: center;
+
+}
+
+.box {
+  flex: 1;
+  display: flex;
+
+}
+
+/* Style for the Save Changes and Clear Changes buttons */
+#saveButton {
+  padding: 12px 24px;
+  background-color: #2eb872;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 5px;
+  margin-bottom: 15px;
+}
+
+#clearButton {
+  padding: 12px 24px;
+  background-color: #eb2632;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 5px;
+  margin-bottom: 15px;
+}
+
+#saveButton:hover,
+#clearButton:hover {
+  background-color: #0056b3;
+}
+
+/* Style for the "Download Screenshot" button */
+#downloadScreenshotButton {
+  padding: 11px 24px;
+  background-color: #FFEA20;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 5px;
+  margin-bottom: 15px;
+}
+
+#downloadScreenshotButton:hover {
+  background-color: #0056b3;
+}
+
+/* Style for the course count container */
+#courseCountContainer {
+  text-align: center;
+  margin: 20px 0;
+}
+
+#courseCountContainer label {
+  margin-right: 10px;
+}
+
+#courseCountLabel {
+  background-color: #22559c;
+  padding: 12px;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+#courseCount {
+  width: 55px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+}
+
+#submitCourseCount {
+  padding: 10px 24px;
+  background-color: #22559c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-left: 2px;
+}
+
+#submitCourseCount:hover {
+  background-color: #0056b3;
+}
+
+/* Style for course buttons */
+.button {
+  padding: 5px 5px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #0084ffc0;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 9px #999;
+  margin: 15px 5px 0px 0px;
+  width: 150px;
+  float: left
+}
+
+.button:hover {
+  background-color: #35f2a0
+}
+
+.button:active {
+  background-color: rgb(245, 70, 70);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+
+
+}
+
+#courseButton1 {
+  background-color: #0084ffc0;
+
+}
+
+#courseButton2 {
+  background-color: #DC143C;
+}
+
+#courseButton3 {
+  background-color: #ED9121;
+}
+
+#courseButton4 {
+  background-color: #954535;
+}
+
+#courseButton5 {
+  background-color: #CB410B;
+}
+
+#courseButton6 {
+  background-color: #004225;
+}
+
+#courseButton7 {
+  background-color: #5A4FCF;
+}
+
+#courseButton8 {
+  background-color: #8B004B;
+}
+
+#courseButton9 {
+  background-color: #008B8B;
+}
+
+#courseButton10 {
+  background-color: #6c7c59;
+}
+
+
+
+.flash-message {
+  display: none;
+  background-color: red;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 40%;
+  transform: translateX(-50%);
+  transform: translateY(-50%);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+#selectedSlots {
+  background-color: #1f6f78;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ecfeff;
+}
+
+
+
+/* Add this CSS for responsive behavior */
+
+/* For screens smaller than 600px (e.g., smartphones) */
+@media (max-width: 600px) {
+  #timetable-container {
+    max-width: 100%;
+    /* Allow the timetable to take up the full width */
+    margin: 0;
+    float: none;
+    /* Remove floating behavior */
+  }
+
+  #timetable th,
+  #timetable td {
+    padding: 5px;
+    /* Reduce padding for smaller screens */
+    font-size: 12px;
+    /* Adjust font size */
+  }
+
+  /* You may need to further adjust styles for smaller screens */
+}
+
+/* For screens between 601px and 1024px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* Add specific styles for tablets here */
+}
+
+/* For screens larger than 1024px (e.g., desktops) */
+@media (min-width: 1025px) {
+  /* Add specific styles for desktops here */
+}
