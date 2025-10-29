@@ -1,170 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://freevector.co/wp-content/uploads/2014/04/63226-timetable-outline.png"
-    type="image/icon type">
-  <title>Timetable</title>
-  <!-- Add your CSS stylesheet here -->
-  <link rel="stylesheet" href="styles.css">
-  <script src="index.js"></script>
-  <script src="script.js"></script>
+  <link rel="icon" href="https://freevector.co/wp-content/uploads/2014/04/63226-timetable-outline.png" type="image/icon type">
+  <title>Timetable Scheduler</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+  <style>
+    * {
+      font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    @keyframes stars {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-2000px); }
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff; }
+      50% { text-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff, 0 0 40px #00d4ff, 0 0 50px #00d4ff; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes nebula {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #000000 0%, #0a0e27 50%, #1a1a2e 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 80%, white, transparent);
+      background-size: 200% 200%;
+      animation: stars 100s linear infinite;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+      animation: nebula 15s ease infinite;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(10, 14, 39, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.3), 0 0 100px rgba(138, 43, 226, 0.2);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+      padding: 40px 30px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1), transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      filter: drop-shadow(0 0 20px #00d4ff);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    #main {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #mainLink {
+      background: linear-gradient(45deg, #00d4ff, #7b2ff7, #f3b03f, #00d4ff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      animation: glow 3s ease-in-out infinite, nebula 8s ease infinite;
+      transition: all 0.3s;
+    }
+
+    #mainLink:hover {
+      letter-spacing: 6px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.8;
+      font-weight: 300;
+      color: #00d4ff;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    .content {
+      padding: 40px;
+      position: relative;
+    }
+
+    .course-count-section {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(123, 47, 247, 0.1) 100%);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+    }
+
+    #courseCountLabel {
+      background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 100%);
+      padding: 12px 24px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    #courseCount {
+      width: 80px;
+      padding: 12px;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #00d4ff;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      color: #00d4ff;
+      transition: all 0.3s;
+    }
+
+    #courseCount:focus {
+      outline: none;
+      border-color: #7b2ff7;
+      box-shadow: 0 0 20px rgba(123, 47, 247, 0.5);
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    #submitCourseCount {
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 100%);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    #submitCourseCount:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.6), 0 0 40px rgba(123, 47, 247, 0.4);
+    }
+
+    #courseInputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .button {
+      padding: 12px 24px;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+    }
+
+    #courseButton1 { background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%); }
+    #courseButton2 { background: linear-gradient(135deg, #ff006e 0%, #ff4d8f 100%); }
+    #courseButton3 { background: linear-gradient(135deg, #fb5607 0%, #ff8500 100%); }
+    #courseButton4 { background: linear-gradient(135deg, #8338ec 0%, #a855f7 100%); }
+    #courseButton5 { background: linear-gradient(135deg, #3a86ff 0%, #06b6d4 100%); }
+    #courseButton6 { background: linear-gradient(135deg, #06ffa5 0%, #00d4aa 100%); }
+    #courseButton7 { background: linear-gradient(135deg, #7b2ff7 0%, #a855f7 100%); }
+    #courseButton8 { background: linear-gradient(135deg, #ff006e 0%, #d946ef 100%); }
+    #courseButton9 { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+    #courseButton10 { background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%); }
+
+    #timetable-container {
+      overflow-x: auto;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    #timetable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #timetable th {
+      background: linear-gradient(135deg, #0a0e27 0%, #16213e 100%);
+      color: #00d4ff;
+      padding: 16px 12px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    #timetable tbody th {
+      background: linear-gradient(135deg, #7b2ff7 0%, #00d4ff 100%);
+      font-size: 16px;
+      font-weight: 700;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+
+    #timetable td {
+      padding: 20px 12px;
+      text-align: center;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      color: #00d4ff;
+    }
+
+    .slot {
+      background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(22, 33, 62, 0.8) 100%);
+    }
+
+    .slot:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(123, 47, 247, 0.3) 100%);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+      z-index: 1;
+      color: #fff;
+    }
+
+    .slot.selected {
+      background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 100%);
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 50px rgba(123, 47, 247, 0.6);
+      animation: pulse 0.5s ease-in-out;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    #buttonstable {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .action-button {
+      padding: 14px 32px;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .action-button:hover::after {
+      width: 400px;
+      height: 400px;
+    }
+
+    .action-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
+    }
+
+    #saveButton {
+      background: linear-gradient(135deg, #06ffa5 0%, #00d4aa 100%);
+    }
+
+    #clearButton {
+      background: linear-gradient(135deg, #ff006e 0%, #ff4d8f 100%);
+    }
+
+    #downloadScreenshotButton {
+      background: linear-gradient(135deg, #f3b03f 0%, #ffba08 100%);
+    }
+
+    #boxes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    #selectedTable {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(123, 47, 247, 0.1) 100%);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    #selectedTable table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #selectedTable th {
+      background: linear-gradient(135deg, #0a0e27 0%, #16213e 100%);
+      color: #00d4ff;
+      padding: 16px;
+      text-align: left;
+      font-size: 18px;
+      border-radius: 8px 8px 0 0;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    #selectedTable td {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      padding: 16px;
+      font-size: 15px;
+      color: #00d4ff;
+    }
+
+    #selectedSlots tr {
+      transition: all 0.3s;
+    }
+
+    #selectedSlots tr:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateX(5px);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .flash-message {
+      display: none;
+      padding: 16px 32px;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
+      animation: slideUp 0.3s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes slideUp {
+      from {
+        bottom: -50px;
+        opacity: 0;
+      }
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    .flash-message:not(.error) {
+      background: linear-gradient(135deg, #06ffa5 0%, #00d4aa 100%);
+      color: white;
+    }
+
+    .flash-message.error {
+      background: linear-gradient(135deg, #ff006e 0%, #ff4d8f 100%);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        padding: 20px;
+      }
+
+      #main {
+        font-size: 28px;
+      }
+
+      #timetable th,
+      #timetable td {
+        padding: 10px 6px;
+        font-size: 12px;
+      }
+
+      .course-count-section {
+        flex-direction: column;
+      }
+
+      #buttonstable {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .action-button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-
-
 <body>
-  <svg preserveAspectRatio="xMidYMid meet" data-bbox="53.245 47.211 93.512 105.578"
-    viewBox="53.245 47.211 93.512 105.578" height="200" width="200" xmlns="http://www.w3.org/2000/svg" data-type="tint"
-    role="img" aria-label="Homepage">
-    <g>
-      <path
-        d="M100 47.211L53.245 79.502v10.287H61.5v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789H82.5v-7h7v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789h4.104v-7h7v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789h4.104v-7h8.255V79.501L100 47.211zm-24.604 75.183l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zM79.5 93.789h-15v-4h15v4zm23.896 28.605l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zm4.104-28.605h-15v-4h15v4zm23.896 28.605l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zm4.104-28.605h-15v-4h15v4zm8.255-7h-87.51v-5.713L100 50.856l43.755 30.219v5.714z"
-        fill="#7CE6E8"></path>
-      <path d="M141.5 135.789h-83v7h-5v10h93v-10h-5v-7zm-80 3h77v4h-77v-4zm82 7v4h-87v-4h87z" fill="#7CE6E8"></path>
-      <path
-        d="M93.5 72.289c0 3.584 2.916 6.5 6.5 6.5s6.5-2.916 6.5-6.5-2.916-6.5-6.5-6.5-6.5 2.916-6.5 6.5zm10 0c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5z"
-        fill="#7CE6E8"></path>
-    </g>
-  </svg>
-  <span id="main"><a id="mainLink" href="https://www.studykraft.tech/" target="_blank">STUDYKRAFT</a></span>
-  <!-- Timetable for Days and Time -->
-  <!-- Timetable for Days and Time -->
-  <div id="timetable-container">
-    <table id="timetable">
-      <thead>
-        <tr>
-          <th></th>
-          <th>8:30 AM - 10:00 AM</th>
-          <th>10:05 AM - 11:35 AM</th>
-          <th>11:40 AM - 1:10 PM</th>
-          <th>1:15 PM - 2:45 PM</th>
-          <th>2:50 PM - 4:20 PM</th>
-          <th>4:25 PM - 5:55 PM</th>
-          <th>6:00 PM - 7:30 PM</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>MON</th>
-          <td class="slot" data-day="MON" data-start="8:30" data-end="10:00">A11</td>
-          <td class="slot" data-day="MON" data-start="10:05" data-end="11:35">B11</td>
-          <td class="slot" data-day="MON" data-start="11:40" data-end="1:10">C11</td>
-          <td class="slot" data-day="MON" data-start="1:15" data-end="2:45">A21</td>
-          <td class="slot" data-day="MON" data-start="2:50" data-end="4:20">A14</td>
-          <td class="slot" data-day="MON" data-start="4:25" data-end="5:55">B21</td>
-          <td class="slot" data-day="MON" data-start="6:00" data-end="7:30">C21</td>
-        </tr>
-        <tr>
-          <th>TUE</th>
-          <td class="slot" data-day="TUE" data-start="8:30" data-end="10:00">D11</td>
-          <td class="slot" data-day="TUE" data-start="10:05" data-end="11:35">E11</td>
-          <td class="slot" data-day="TUE" data-start="11:40" data-end="1:10">F11</td>
-          <td class="slot" data-day="TUE" data-start="1:15" data-end="2:45">D21</td>
-          <td class="slot" data-day="TUE" data-start="2:50" data-end="4:20">E14</td>
-          <td class="slot" data-day="TUE" data-start="4:25" data-end="5:55">E21</td>
-          <td class="slot" data-day="TUE" data-start="6:00" data-end="7:30">F21</td>
-        </tr>
-        <tr>
-          <th>WED</th>
-          <td class="slot" data-day="WED" data-start="8:30" data-end="10:00">A12</td>
-          <td class="slot" data-day="WED" data-start="10:05" data-end="11:35">B12</td>
-          <td class="slot" data-day="WED" data-start="11:40" data-end="1:10">C12</td>
-          <td class="slot" data-day="WED" data-start="1:15" data-end="2:45">A22</td>
-          <td class="slot" data-day="WED" data-start="2:50" data-end="4:20">B14</td>
-          <td class="slot" data-day="WED" data-start="4:25" data-end="5:55">B22</td>
-          <td class="slot" data-day="WED" data-start="6:00" data-end="7:30">A24</td>
-        </tr>
-        <tr>
-          <th>THU</th>
-          <td class="slot" data-day="THU" data-start="8:30" data-end="10:00">D12</td>
-          <td class="slot" data-day="THU" data-start="10:05" data-end="11:35">E12</td>
-          <td class="slot" data-day="THU" data-start="11:40" data-end="1:10">F12</td>
-          <td class="slot" data-day="THU" data-start="1:15" data-end="2:45">D22</td>
-          <td class="slot" data-day="THU" data-start="2:50" data-end="4:20">F14</td>
-          <td class="slot" data-day="THU" data-start="4:25" data-end="5:55">E22</td>
-          <td class="slot" data-day="THU" data-start="6:00" data-end="7:30">F22</td>
-        </tr>
-        <tr>
-          <th>FRI</th>
-          <td class="slot" data-day="FRI" data-start="8:30" data-end="10:00">A13</td>
-          <td class="slot" data-day="FRI" data-start="10:05" data-end="11:35">B13</td>
-          <td class="slot" data-day="FRI" data-start="11:40" data-end="1:10">C13</td>
-          <td class="slot" data-day="FRI" data-start="1:15" data-end="2:45">A23</td>
-          <td class="slot" data-day="FRI" data-start="2:50" data-end="4:20">C14</td>
-          <td class="slot" data-day="FRI" data-start="4:25" data-end="5:55">B23</td>
-          <td class="slot" data-day="FRI" data-start="6:00" data-end="7:30">B24</td>
-        </tr>
-        <tr>
-          <th>SAT</th>
-          <td class="slot" data-day="SAT" data-start="8:30" data-end="10:00">D13</td>
-          <td class="slot" data-day="SAT" data-start="10:05" data-end="11:35">E13</td>
-          <td class="slot" data-day="SAT" data-start="11:40" data-end="1:10">F13</td>
-          <td class="slot" data-day="SAT" data-start="1:15" data-end="2:45">D23</td>
-          <td class="slot" data-day="SAT" data-start="2:50" data-end="4:20">D14</td>
-          <td class="slot" data-day="SAT" data-start="4:25" data-end="5:55">D24</td>
-          <td class="slot" data-day="SAT" data-start="6:00" data-end="7:30">E23</td>
-        </tr>
-        <!-- Add similar rows for other days -->
-      </tbody>
-    </table>
-  </div>
+  <div class="container">
+    <div class="header">
+      <svg class="logo" preserveAspectRatio="xMidYMid meet" viewBox="53.245 47.211 93.512 105.578" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <path d="M100 47.211L53.245 79.502v10.287H61.5v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789H82.5v-7h7v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789h4.104v-7h7v7h4.104v36.003l6.376-10.255 6.417 10.647V96.789h4.104v-7h8.255V79.501L100 47.211zm-24.604 75.183l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zM79.5 93.789h-15v-4h15v4zm23.896 28.605l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zm4.104-28.605h-15v-4h15v4zm23.896 28.605l-3.376-5.603-3.417 5.495V96.789h6.793v25.605zm4.104-28.605h-15v-4h15v4zm8.255-7h-87.51v-5.713L100 50.856l43.755 30.219v5.714z" fill="#00d4ff"></path>
+          <path d="M141.5 135.789h-83v7h-5v10h93v-10h-5v-7zm-80 3h77v4h-77v-4zm82 7v4h-87v-4h87z" fill="#00d4ff"></path>
+          <path d="M93.5 72.289c0 3.584 2.916 6.5 6.5 6.5s6.5-2.916 6.5-6.5-2.916-6.5-6.5-6.5-6.5 2.916-6.5 6.5zm10 0c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5z" fill="#00d4ff"></path>
+        </g>
+      </svg>
+      <div id="main">
+        <a id="mainLink" href="https://www.studykraft.tech/" target="_blank">STUDYKRAFT</a>
+      </div>
+      <div class="subtitle"> Plan Your Perfect Schedule Across The Stars </div>
+    </div>
 
+    <div class="content">
+      <div class="course-count-section">
+        <label for="courseCount" id="courseCountLabel"> Number of Courses:</label>
+        <input type="number" id="courseCount" min="1" max="10" value="1">
+        <button id="submitCourseCount">Submit</button>
+      </div>
 
-  <br>
+      <div id="courseInputs"></div>
 
-  <!-- Error message for slot clash -->
+      <div id="timetable-container">
+        <table id="timetable">
+          <thead>
+            <tr>
+              <th></th>
+              <th>8:30 AM<br>10:00 AM</th>
+              <th>10:05 AM<br>11:35 AM</th>
+              <th>11:40 AM<br>1:10 PM</th>
+              <th>1:15 PM<br>2:45 PM</th>
+              <th>2:50 PM<br>4:20 PM</th>
+              <th>4:25 PM<br>5:55 PM</th>
+              <th>6:00 PM<br>7:30 PM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>MON</th>
+              <td class="slot" data-day="MON" data-start="8:30" data-end="10:00">A11</td>
+              <td class="slot" data-day="MON" data-start="10:05" data-end="11:35">B11</td>
+              <td class="slot" data-day="MON" data-start="11:40" data-end="1:10">C11</td>
+              <td class="slot" data-day="MON" data-start="1:15" data-end="2:45">A21</td>
+              <td class="slot" data-day="MON" data-start="2:50" data-end="4:20">A14</td>
+              <td class="slot" data-day="MON" data-start="4:25" data-end="5:55">B21</td>
+              <td class="slot" data-day="MON" data-start="6:00" data-end="7:30">C21</td>
+            </tr>
+            <tr>
+              <th>TUE</th>
+              <td class="slot" data-day="TUE" data-start="8:30" data-end="10:00">D11</td>
+              <td class="slot" data-day="TUE" data-start="10:05" data-end="11:35">E11</td>
+              <td class="slot" data-day="TUE" data-start="11:40" data-end="1:10">F11</td>
+              <td class="slot" data-day="TUE" data-start="1:15" data-end="2:45">D21</td>
+              <td class="slot" data-day="TUE" data-start="2:50" data-end="4:20">E14</td>
+              <td class="slot" data-day="TUE" data-start="4:25" data-end="5:55">E21</td>
+              <td class="slot" data-day="TUE" data-start="6:00" data-end="7:30">F21</td>
+            </tr>
+            <tr>
+              <th>WED</th>
+              <td class="slot" data-day="WED" data-start="8:30" data-end="10:00">A12</td>
+              <td class="slot" data-day="WED" data-start="10:05" data-end="11:35">B12</td>
+              <td class="slot" data-day="WED" data-start="11:40" data-end="1:10">C12</td>
+              <td class="slot" data-day="WED" data-start="1:15" data-end="2:45">A22</td>
+              <td class="slot" data-day="WED" data-start="2:50" data-end="4:20">B14</td>
+              <td class="slot" data-day="WED" data-start="4:25" data-end="5:55">B22</td>
+              <td class="slot" data-day="WED" data-start="6:00" data-end="7:30">A24</td>
+            </tr>
+            <tr>
+              <th>THU</th>
+              <td class="slot" data-day="THU" data-start="8:30" data-end="10:00">D12</td>
+              <td class="slot" data-day="THU" data-start="10:05" data-end="11:35">E12</td>
+              <td class="slot" data-day="THU" data-start="11:40" data-end="1:10">F12</td>
+              <td class="slot" data-day="THU" data-start="1:15" data-end="2:45">D22</td>
+              <td class="slot" data-day="THU" data-start="2:50" data-end="4:20">F14</td>
+              <td class="slot" data-day="THU" data-start="4:25" data-end="5:55">E22</td>
+              <td class="slot" data-day="THU" data-start="6:00" data-end="7:30">F22</td>
+            </tr>
+            <tr>
+              <th>FRI</th>
+              <td class="slot" data-day="FRI" data-start="8:30" data-end="10:00">A13</td>
+              <td class="slot" data-day="FRI" data-start="10:05" data-end="11:35">B13</td>
+              <td class="slot" data-day="FRI" data-start="11:40" data-end="1:10">C13</td>
+              <td class="slot" data-day="FRI" data-start="1:15" data-end="2:45">A23</td>
+              <td class="slot" data-day="FRI" data-start="2:50" data-end="4:20">C14</td>
+              <td class="slot" data-day="FRI" data-start="4:25" data-end="5:55">B23</td>
+              <td class="slot" data-day="FRI" data-start="6:00" data-end="7:30">B24</td>
+            </tr>
+            <tr>
+              <th>SAT</th>
+              <td class="slot" data-day="SAT" data-start="8:30" data-end="10:00">D13</td>
+              <td class="slot" data-day="SAT" data-start="10:05" data-end="11:35">E13</td>
+              <td class="slot" data-day="SAT" data-start="11:40" data-end="1:10">F13</td>
+              <td class="slot" data-day="SAT" data-start="1:15" data-end="2:45">D23</td>
+              <td class="slot" data-day="SAT" data-start="2:50" data-end="4:20">D14</td>
+              <td class="slot" data-day="SAT" data-start="4:25" data-end="5:55">D24</td>
+              <td class="slot" data-day="SAT" data-start="6:00" data-end="7:30">E23</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <div id="buttonstable">
+        <button id="saveButton" class="action-button"> Save Changes</button>
+        <button id="clearButton" class="action-button"> Clear Changes</button>
+        <button id="downloadScreenshotButton" class="action-button"> Download</button>
+      </div>
 
-  <table id="buttonstable">
-    <th>
-      <!-- Save Changes button -->
-      <button id="saveButton">Save Changes</button>
-      <!-- Clear Changes button -->
-      <button id="clearButton">Clear Changes</button>
-      <button id="downloadScreenshotButton">Download ⭳ </button>
-    </th>
-
-  </table>
-
-  <!-- Flash message for changes saved -->
-  <div id="flashMessage" class="flash-message"></div>
-  <!-- Flash message for Save Changes -->
-  <div id="saveChangesFlash" class="flash-message"></div>
-
-  <!-- Flash message for Clear Changes -->
-  <div id="clearChangesFlash" class="flash-message"></div>
-  <br>
-
-
-  <!-- Input for the number of courses -->
-  <label for="courseCount" id="courseCountLabel">Number of Courses:</label>
-  <input type="number" id="courseCount" min="1" max="10" value="1">
-  <button id="submitCourseCount">Submit</button>
-  <div id="boxes">
-    <!-- Input fields for each course -->
-    <div id="courseInputs" class="box"></div>
-    <!-- Selected slots table -->
-    <div id="selectedTable" class="box">
-      <table>
-        <thead>
-          <tr>
-            <th>Selected Slots</th>
-          </tr>
-        </thead>
-        <tbody id="selectedSlots">
-          <!-- Selected slots will be displayed here -->
-        </tbody>
-      </table>
+      <div id="boxes">
+        <div id="selectedTable">
+          <table>
+            <thead>
+              <tr>
+                <th> Selected Slots</th>
+              </tr>
+            </thead>
+            <tbody id="selectedSlots">
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
+  <div id="flashMessage" class="flash-message"></div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const timetable = document.getElementById("timetable");
+      const selectedSlotsBody = document.getElementById("selectedSlots");
+      const saveButton = document.getElementById("saveButton");
+      const clearButton = document.getElementById("clearButton");
+      const courseCountInput = document.getElementById("courseCount");
+      const submitCourseCountButton = document.getElementById("submitCourseCount");
+      const courseInputsContainer = document.getElementById("courseInputs");
+      const flashMessage = document.getElementById("flashMessage");
+      const downloadScreenshotButton = document.getElementById("downloadScreenshotButton");
 
+      let selectedSlotsByCourse = {};
+      let currentCourse = 1;
+      let courseCount = 1;
 
+      function showFlashMessage(message, isError = false) {
+        flashMessage.textContent = message;
+        flashMessage.style.display = "block";
+        flashMessage.classList.toggle("error", isError);
+
+        setTimeout(() => {
+          flashMessage.style.display = "none";
+          flashMessage.classList.remove("error");
+        }, 2000);
+      }
+
+      function toggleSlot(event) {
+        const td = event.target;
+
+        if (td.classList.contains("selected")) {
+          selectedSlotsByCourse[currentCourse] = selectedSlotsByCourse[currentCourse].filter(slot => slot !== td.textContent);
+          td.classList.remove("selected");
+        } else {
+          const clashes = Object.values(selectedSlotsByCourse).some(slots => slots.includes(td.textContent));
+
+          if (!clashes) {
+            if (!selectedSlotsByCourse[currentCourse]) {
+              selectedSlotsByCourse[currentCourse] = [];
+            }
+            selectedSlotsByCourse[currentCourse].push(td.textContent);
+            td.classList.add("selected");
+
+            const clashPairs = [
+              ["C11", "A21", "MON", "11:40", "1:15"],
+              ["F11", "D21", "TUE", "11:40", "1:15"],
+              ["C12", "A22", "WED", "11:40", "1:15"],
+              ["F12", "D22", "THU", "11:40", "1:15"],
+              ["C13", "A23", "FRI", "11:40", "1:15"],
+              ["F13", "D23", "SAT", "11:40", "1:15"]
+            ];
+
+            clashPairs.forEach(([slot1, slot2, day, time1, time2]) => {
+              if (td.textContent === slot1) {
+                const selector = `td.slot.selected[data-day='${day}'][data-start='${time2}']`;
+                const conflictSlot = timetable.querySelector(selector);
+                if (conflictSlot && conflictSlot.textContent === slot2) {
+                  conflictSlot.classList.remove("selected");
+                  selectedSlotsByCourse[currentCourse] = selectedSlotsByCourse[currentCourse].filter(slot => slot !== slot2);
+                  showFlashMessage(`⚠️ Slot clash: ${slot1} and ${slot2} cannot be selected together`, true);
+                }
+              } else if (td.textContent === slot2) {
+                const selector = `td.slot.selected[data-day='${day}'][data-start='${time1}']`;
+                const conflictSlot = timetable.querySelector(selector);
+                if (conflictSlot && conflictSlot.textContent === slot1) {
+                  conflictSlot.classList.remove("selected");
+                  selectedSlotsByCourse[currentCourse] = selectedSlotsByCourse[currentCourse].filter(slot => slot !== slot1);
+                  showFlashMessage(`⚠️ Slot clash: ${slot1} and ${slot2} cannot be selected together`, true);
+                }
+              }
+            });
+          }
+        }
+      }
+
+      function updateSelectedTable() {
+        selectedSlotsBody.innerHTML = "";
+        for (const [course, slots] of Object.entries(selectedSlotsByCourse)) {
+          if (slots.length > 0) {
+            const tr = document.createElement("tr");
+            const courseSlot = document.createElement("td");
+            courseSlot.textContent = `Course ${course}: ${slots.join(', ')}`;
+            tr.appendChild(courseSlot);
+            selectedSlotsBody.appendChild(tr);
+          }
+        }
+      }
+
+      function saveChanges() {
+        updateSelectedTable();
+        showFlashMessage(" Changes saved successfully!");
+      }
+
+      function clearChanges() {
+        selectedSlotsByCourse = {};
+        const selectedSlotsElements = timetable.querySelectorAll("td.slot.selected");
+        selectedSlotsElements.forEach(slot => {
+          slot.classList.remove("selected");
+        });
+        showFlashMessage(" Changes cleared!");
+        updateSelectedTable();
+      }
+
+      function submitCourseCount() {
+        courseCount = parseInt(courseCountInput.value, 10);
+        courseInputsContainer.innerHTML = "";
+        for (let i = 1; i <= courseCount; i++) {
+          const courseInput = document.createElement("div");
+          courseInput.textContent = `Course ${i}`;
+          courseInput.classList.add("button");
+          courseInput.id = `courseButton${i}`;
+          courseInputsContainer.appendChild(courseInput);
+        }
+
+        selectedSlotsByCourse = {};
+        currentCourse = 1;
+
+        const selectedSlotsElements = timetable.querySelectorAll("td.slot.selected");
+        selectedSlotsElements.forEach(slot => {
+          slot.classList.remove("selected");
+        });
+
+        updateSelectedTable();
+      }
+
+      function switchCourse(course) {
+        currentCourse = course;
+        showFlashMessage(` Switched to Course ${course}`);
+      }
+
+      downloadScreenshotButton.addEventListener("click", () => {
+        html2canvas(document.getElementById("timetable-container")).then(function (canvas) {
+          const link = document.createElement("a");
+          link.href = canvas.toDataURL("image/png");
+          link.download = "timetable_screenshot.png";
+          link.click();
+          showFlashMessage(" Screenshot downloaded!");
+        });
+      });
+
+      const cells = timetable.querySelectorAll("td.slot[data-day][data-start][data-end]");
+      cells.forEach(cell => {
+        cell.addEventListener("click", toggleSlot);
+      });
+
+      saveButton.addEventListener("click", saveChanges);
+      clearButton.addEventListener("click", clearChanges);
+      submitCourseCountButton.addEventListener("click", submitCourseCount);
+
+      courseInputsContainer.addEventListener("click", (event) => {
+        if (event.target.classList.contains("button")) {
+          switchCourse(parseInt(event.target.textContent.split(" ")[1]));
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>
